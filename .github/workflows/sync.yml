@@ -15,7 +15,7 @@ jobs:
 
       - name: Push to GitLab
         env:
-          GITLAB_TOKEN: ${{ glpat-Covxjf65tmj6iJGhTCRDfmM6MQpvOjEKdTpxNnBxaA8.01.170o5fm23 }}
+          GITLAB_TOKEN: "${{ glpat-Covxjf65tmj6iJGhTCRDfmM6MQpvOjEKdTpxNnBxaA8.01.170o5fm23 }}"
         run: |
-          git remote add gitlab https://oauth2:${{ glpat-Covxjf65tmj6iJGhTCRDfmM6MQpvOjEKdTpxNnBxaA8.01.170o5fm23 }}@gitlab.com/6erson/https://gitlab.com/uth-group2/opticalumenproyecto.git
+          git remote add gitlab "https://oauth2:${{ glpat-Covxjf65tmj6iJGhTCRDfmM6MQpvOjEKdTpxNnBxaA8.01.170o5fm23 }}@gitlab.com/6erson/https://gitlab.com/uth-group2/opticalumenproyecto.git"
           git push gitlab main --force
