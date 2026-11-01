@@ -23,5 +23,10 @@ public class LumenOptica {
         } else {
             System.out.println("No se pudo conectar a LumenDB.");
         }
+        
+        // Inicia e invoca la ventana de Login
+    java.awt.EventQueue.invokeLater(() -> {
+        new com.lumen.optica.vista.VentanaLogin().setVisible(true);
+    });
     }
 }

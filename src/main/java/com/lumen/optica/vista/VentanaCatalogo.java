@@ -441,25 +441,34 @@ private void cargarProductos() {
         etiquetaImagen.setForeground(new Color(120, 130, 145));
         etiquetaImagen.setPreferredSize(new Dimension(220, 160));
 
-        String ruta = producto.getImagen();
+        String ruta = producto.getImagen(); // Obtiene el valor almacenado en BD
 
         if (ruta != null && !ruta.trim().isEmpty()) {
-            File archivo = new File(ruta);
+            ImageIcon icono = null;
 
-            if (!archivo.isAbsolute()) {
-                archivo = new File(
-                        System.getProperty("user.dir"), ruta);
+            // Extraer solo el nombre del archivo si viene con una ruta de carpetas
+            String nombreArchivo = new java.io.File(ruta).getName();
+
+            // Buscar la imagen en el classpath del .jar (src/main/resources/imagenes/)
+            java.net.URL imgUrl = getClass().getResource("/imagenes/" + nombreArchivo);
+
+            if (imgUrl != null) {
+                icono = new ImageIcon(imgUrl);
+            } else {
+                // Fallback: intentar cargar como archivo físico
+                java.io.File archivoFisico = new java.io.File(ruta);
+                if (archivoFisico.exists()) {
+                    icono = new ImageIcon(archivoFisico.getAbsolutePath());
+                }
             }
 
-            if (archivo.exists()) {
-                ImageIcon icono = new ImageIcon(
-                        archivo.getAbsolutePath());
-
-                Image imagen = icono.getImage().getScaledInstance(
-                        220, 160, Image.SCALE_SMOOTH);
-
+            if (icono != null && icono.getIconWidth() > 0) {
+                Image imagen = icono.getImage().getScaledInstance(220, 160, Image.SCALE_SMOOTH);
                 etiquetaImagen.setText("");
                 etiquetaImagen.setIcon(new ImageIcon(imagen));
+            } else {
+                etiquetaImagen.setText("Imagen no disponible");
+                etiquetaImagen.setIcon(null);
             }
         }
 

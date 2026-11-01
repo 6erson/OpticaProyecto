@@ -327,41 +327,47 @@ JPanel contenedorBanner = new JPanel(
 contenedorBanner.setOpaque(false);
 
 try {
-    BufferedImage imagenOriginal = ImageIO.read(
-            new File("imagenes/banner_promocional.png"));
+    // 1. Intentar cargar la imagen desde los recursos del .jar (Classpath)
+    java.net.URL bannerUrl = getClass().getResource("/imagenes/banner_promocional.png");
+    BufferedImage imagenOriginal = null;
 
-    // Ajustar imagen conservando sus proporciones
-    int anchoMaximo = 820;
-    int altoMaximo = 430;
+    if (bannerUrl != null) {
+        imagenOriginal = ImageIO.read(bannerUrl);
+    } else {
+        // 2. Si no la halla en el .jar, buscarla como archivo físico en disco
+        File archivoFisico = new File("imagenes/banner_promocional.png");
+        if (archivoFisico.exists()) {
+            imagenOriginal = ImageIO.read(archivoFisico);
+        }
+    }
 
-    double escala = Math.min(
+    if (imagenOriginal != null) {
+        int anchoMaximo = 820;
+        int altoMaximo = 430;
+
+        double escala = Math.min(
             (double) anchoMaximo / imagenOriginal.getWidth(),
-            (double) altoMaximo / imagenOriginal.getHeight());
+            (double) altoMaximo / imagenOriginal.getHeight()
+        );
 
-    int nuevoAncho = (int) (
-            imagenOriginal.getWidth() * escala);
+        int nuevoAncho = (int) (imagenOriginal.getWidth() * escala);
+        int nuevoAlto = (int) (imagenOriginal.getHeight() * escala);
 
-    int nuevoAlto = (int) (
-            imagenOriginal.getHeight() * escala);
-
-    Image imagenEscalada = imagenOriginal.getScaledInstance(
+        Image imagenEscalada = imagenOriginal.getScaledInstance(
             nuevoAncho,
             nuevoAlto,
-            Image.SCALE_SMOOTH);
+            Image.SCALE_SMOOTH
+        );
 
-    JLabel banner = new JLabel(
-            new ImageIcon(imagenEscalada));
-
-    contenedorBanner.add(banner);
-
+        JLabel banner = new JLabel(new ImageIcon(imagenEscalada));
+        contenedorBanner.add(banner);
+    } else {
+        JLabel error = new JLabel("No se pudo cargar el banner promocional.");
+        contenedorBanner.add(error);
+    }
 } catch (Exception e) {
-
-    JLabel error = new JLabel(
-            "No se pudo cargar el banner promocional.");
-
-    error.setForeground(VERDE);
+    JLabel error = new JLabel("No se pudo cargar el banner promocional.");
     contenedorBanner.add(error);
-
 }
 
 panel.add(contenedorBanner);
