@@ -1,0 +1,21 @@
+name: Sync to GitLab
+
+on:
+  push:
+    branches: [ "main" ] # Cambia a "master" si tu rama principal usa ese nombre
+
+jobs:
+  sync-to-gitlab:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to GitLab
+        env:
+          GITLAB_TOKEN: ${{ glpat-Covxjf65tmj6iJGhTCRDfmM6MQpvOjEKdTpxNnBxaA8.01.170o5fm23 }}
+        run: |
+          git remote add gitlab https://oauth2:${{ glpat-Covxjf65tmj6iJGhTCRDfmM6MQpvOjEKdTpxNnBxaA8.01.170o5fm23 }}@gitlab.com/6erson/https://gitlab.com/uth-group2/opticalumenproyecto.git
+          git push gitlab main --force
